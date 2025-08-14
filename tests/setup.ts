@@ -1,7 +1,8 @@
 import fs from 'node:fs'
 
 export default function () {
-  fs.copyFileSync('.env', '.dev.vars')
+  const source = fs.existsSync('.env') ? '.env' : '.env.example'
+  fs.copyFileSync(source, '.dev.vars')
 
   return () => {
     fs.rmSync('.dev.vars')

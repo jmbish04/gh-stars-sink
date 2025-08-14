@@ -45,6 +45,20 @@
 
 ---
 
+## MCP Worker Tool
+
+This repository also contains a Model Context Protocol (MCP) compliant backend implemented as a Cloudflare Worker. The worker exposes a `/search` endpoint and an OpenAPI schema at `/openapi.json` for integration with AI agents.
+
+### Deploy on Cloudflare Workers
+
+1. Install dependencies with `pnpm install`.
+2. Authenticate with Cloudflare using `pnpm wrangler login`.
+3. Deploy the worker using `pnpm wrangler deploy`.
+
+### Run tests
+
+Execute `pnpm test` to run the unit tests against a local Workers runtime.
+
 ## ✨ Features
 
 - **URL Shortening:** Compress your URLs to their minimal length.

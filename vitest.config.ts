@@ -3,6 +3,7 @@ import { loadEnv } from 'vite'
 
 export default defineWorkersConfig(({ mode }) => ({
   test: {
+    include: ['tests/worker.spec.ts'],
     env: loadEnv(mode, process.cwd(), ''),
     globalSetup: './tests/setup.ts',
     poolOptions: {
@@ -10,7 +11,7 @@ export default defineWorkersConfig(({ mode }) => ({
         singleWorker: true,
         isolatedStorage: false,
         wrangler: {
-          configPath: './wrangler.jsonc',
+          configPath: './wrangler.toml',
         },
         miniflare: {
           cf: true,

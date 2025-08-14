@@ -1,0 +1,28 @@
+name = "gh-stars-backend"
+main = "src/index.ts"
+compatibility_date = "2025-05-08"
+compatibility_flags = [ "nodejs_compat" ]
+
+[ai]
+binding = "AI"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ghstars"
+database_id = "REPLACE_D1_ID"
+
+[[vectorize]]
+binding = "VEC"
+index_name = "ghstars-index"
+
+[[kv_namespaces]]
+binding = "TERMS"
+id = "REPLACE_KV_ID"
+
+[[r2_buckets]]
+binding = "INBOX"
+bucket_name = "gh-stars-inbox"
+
+[queues]
+consumers = [ { queue = "ingest-q", max_batch_size = 10 } ]
+producers = [ { binding = "Q_INGEST", queue = "ingest-q" } ]

@@ -39,6 +39,10 @@ CREATE INDEX IF NOT EXISTS idx_repos_lang ON repos(language);
 CREATE INDEX IF NOT EXISTS idx_repos_pushed ON repos(pushed_at_gh DESC);
 CREATE INDEX IF NOT EXISTS idx_repos_updated ON repos(updated_at_gh DESC);
 
+
+-- If you filter by language a lot, you’ve got an index. If you often filter by archived=0, consider a partial index:
+CREATE INDEX IF NOT EXISTS idx_repos_active ON repos(updated_at_gh DESC) WHERE archived = 0;
+
 -- =========================
 -- YOUR STAR HISTORY (single-user sink)
 -- =========================

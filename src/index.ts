@@ -45,7 +45,7 @@ app.get('/ws', () => {
   const [client, server] = [pair[0], pair[1]]
   server.accept()
   server.addEventListener('message', (e) => {
-    server.send(String(e.data))
+    server.send(e.data)
   })
   return new Response(null, { status: 101, webSocket: client })
 })

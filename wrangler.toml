@@ -14,14 +14,14 @@ keep_vars = true
 upload_source_maps = true
 
 # Assets that might work for workers, but wouldn't work for pages -- 'ASSET' is a reserved word
-# [assets]
-# binding = "ASSETS" -- pages won't accept this, says its reserved
-# directory = "dist/public"
+[assets]
+binding = "ASSETS" # pages won't accept this, says its reserved
+directory = "dist/public"
 
 # Assets that are pages compliant
-[assets]
-binding = "STATIC_ASSETS"
-directory = "dist/public"
+# [assets]
+# binding = "STATIC_ASSETS"
+# directory = "dist/public"
 
 # AI binding (present in both, kept from your file)
 [ai]

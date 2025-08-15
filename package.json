@@ -19,7 +19,7 @@
     "dev": "nuxt dev",
     "deploy": "npm run deploy:worker",
     "deploy:pages": "wrangler pages deploy",
-    "deploy:worker": "nuxt build && wrangler deploy"
+    "deploy:worker": "nuxt build && wrangler deploy",
     "test:worker": "vitest run -c vitest.worker.config.ts",
     "preview": "wrangler dev --var $(cat .env | sed 's/=/:/g')",
     "test": "vitest run",

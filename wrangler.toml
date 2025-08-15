@@ -63,5 +63,5 @@ bucket_name = "gh-stars-inbox"
 
 # Queues configuration from your file
 [queues]
-consumers = [ { queue = "ingest-q", max_batch_size = 10 } ]
-producers = [ { binding = "Q_INGEST", queue = "ingest-q" } ]
+consumers = [ { queue = "ingest-rss", max_batch_size = 10 } ]
+producers = [ { binding = "Q_INGEST", queue = "ingest-rss" } ]

@@ -13,9 +13,14 @@ pages_build_output_dir = "dist"
 keep_vars = true
 upload_source_maps = true
 
-# Assets configuration from the JSON example
+# Assets that might work for workers, but wouldn't work for pages -- 'ASSET' is a reserved word
+# [assets]
+# binding = "ASSETS" -- pages won't accept this, says its reserved
+# directory = "dist/public"
+
+# Assets that are pages compliant
 [assets]
-binding = "ASSETS"
+binding = "STATIC_ASSETS"
 directory = "dist/public"
 
 # AI binding (present in both, kept from your file)

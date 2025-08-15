@@ -6,6 +6,9 @@ main = "src/index.ts"
 compatibility_date = "2025-05-08"
 compatibility_flags = [ "nodejs_compat" ]
 
+# This new line tells Cloudflare Pages where your static site is built.
+pages_build_output_dir = "dist"
+
 # Added from the JSON example
 keep_vars = true
 upload_source_maps = true

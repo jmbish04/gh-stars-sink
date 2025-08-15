@@ -2,11 +2,11 @@ import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 
 interface Env {
   DB: D1Database
-  VEC: unknown
+  VEC: VectorizeIndex
   TERMS: KVNamespace
   INBOX: R2Bucket
   Q_INGEST: Queue
-  AI: unknown
+  AI: Ai
 }
 
 const app = new OpenAPIHono<{ Bindings: Env }>()

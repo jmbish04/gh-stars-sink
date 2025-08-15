@@ -15,7 +15,7 @@ upload_source_maps = true
 # Assets that might work for workers, but wouldn't work for pages -- 'ASSET' is a reserved word
 [assets]
 binding = "STATIC_ASSETS"
-directory = "dist/public"
+directory = "dist"
 
 
 # ENABLE THIS FOR PAGES

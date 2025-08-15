@@ -32,7 +32,7 @@ binding = "AI"
 # Analytics Engine from the JSON example
 [[analytics_engine_datasets]]
 binding = "ANALYTICS"
-dataset = "sink"
+dataset = "gh-stars-sink"
 
 # D1 Database from your file
 [[d1_databases]]

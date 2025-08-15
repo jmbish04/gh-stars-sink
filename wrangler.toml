@@ -1,28 +1,57 @@
+# This is a merged configuration of your wrangler.toml and the JSON example.
+
+# Top-level configuration from your file, with additions from the JSON example
 name = "gh-stars-backend"
 main = "src/index.ts"
 compatibility_date = "2025-05-08"
 compatibility_flags = [ "nodejs_compat" ]
 
+# Added from the JSON example
+keep_vars = true
+upload_source_maps = true
+
+# Assets configuration from the JSON example
+[assets]
+binding = "ASSETS"
+directory = "dist/public"
+
+# AI binding (present in both, kept from your file)
 [ai]
 binding = "AI"
 
+# Analytics Engine from the JSON example
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
+dataset = "sink"
+
+# D1 Database from your file
 [[d1_databases]]
 binding = "DB"
 database_name = "ghstars"
-database_id = "REPLACE_D1_ID"
+database_id = "e536de25-f468-41aa-8383-62a3b0ba8b7f"
+migrations_dir = "schemas/"
 
+# Vectorize Index from your file
+# wrangler vectorize create ghstars-index --dimensions=768 --metric=cosine
 [[vectorize]]
 binding = "VEC"
 index_name = "ghstars-index"
 
+# Merged KV Namespaces from both files
+[[kv_namespaces]]
+binding = "KV"
+id = "46000898f36b4fe7981b47b78e57670b"
+
 [[kv_namespaces]]
 binding = "TERMS"
-id = "REPLACE_KV_ID"
+id = "1bef9fdf56b24ce5afbc61a7b4741484"
 
+# R2 Buckets from your file
 [[r2_buckets]]
 binding = "INBOX"
 bucket_name = "gh-stars-inbox"
 
+# Queues configuration from your file
 [queues]
 consumers = [ { queue = "ingest-q", max_batch_size = 10 } ]
 producers = [ { binding = "Q_INGEST", queue = "ingest-q" } ]

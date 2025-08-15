@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "NODE_OPTIONS=--max-old-space-size=8192 nuxt build",
+    "postbuild": "node scripts/copy-swagger-assets.mjs",
     "build:map": "node scripts/build-map.js",
     "build:colo": "node scripts/build-colo.js",
     "postinstall": "npm run build:map && nuxt prepare",

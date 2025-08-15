@@ -17,7 +17,7 @@
     "lint-staged": "lint-staged",
     "wrangler": "wrangler",
     "dev": "nuxt dev",
-    "deploy": "npm run deploy:pages",
+    "deploy": "npm run deploy:worker",
     "deploy:pages": "wrangler pages deploy",
     "deploy:worker": "wrangler deploy",
     "test:worker": "vitest run -c vitest.worker.config.ts",

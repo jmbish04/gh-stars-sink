@@ -1,7 +1,7 @@
 # This is a merged configuration of your wrangler.toml and the JSON example.
 
 # Top-level configuration from your file, with additions from the JSON example
-name = "gh-stars-backend"
+name = "gh-stars-sink"
 main = "src/index.ts"
 compatibility_date = "2025-05-08"
 compatibility_flags = [ "nodejs_compat" ]

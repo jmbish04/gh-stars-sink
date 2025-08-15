@@ -20,18 +20,18 @@ Sink is a URL shortening service built with Nuxt 3 and Cloudflare Workers. It pr
 Sink/
 ├── app/                     # Nuxt 3 application
 │   ├── components/          # Vue components
-│   ├── pages/              # File-based routing
-│   ├── layouts/            # Layout components
-│   ├── utils/              # Utility functions
-│   └── middleware/         # Route middleware
+│   ├── pages/               # File-based routing
+│   ├── layouts/             # Layout components
+│   ├── utils/               # Utility functions
+│   └── middleware/          # Route middleware
 ├── server/                  # Server-side API
-│   ├── api/                # API endpoints
-│   ├── middleware/         # Server middleware
-│   └── utils/              # Server utilities
-├── public/                 # Static assets
-├── schemas/                # TypeScript schemas
-├── tests/                  # Test files
-└── docs/                   # Documentation
+│   ├── api/                 # API endpoints
+│   ├── middleware/          # Server middleware
+│   └── utils/               # Server utilities
+├── public/                  # Static assets
+├── schemas/                 # TypeScript schemas
+├── tests/                   # Test files
+└── docs/                    # Documentation
 ```
 
 ## Development Commands
@@ -120,3 +120,42 @@ Key environment variables to be aware of:
 - Staging: Automatic on push to `main` branch
 - Production: Manual trigger via Cloudflare dashboard
 - Use `wrangler deploy` for manual deployments
+
+---
+
+**Improvements for AGENT.md based on recent project changes:**
+
+1. **Documented Commit Practices:**  
+   - Encourage detailed commit messages and linking issues/PRs when possible.
+
+2. **Testing Section Expansion:**  
+   - Clarify if integration or E2E tests are planned; update as these are implemented.
+   - If using new test utilities, document their usage.
+
+3. **API/Schema Evolution:**  
+   - As new endpoints are added, maintain a changelog in `/docs/` or reference API versioning conventions.
+   - Encourage clear doc comments in endpoint files.
+
+4. **Component Library Usage:**  
+   - If adopting additional UI libraries or design tokens, reference those in the Key Technologies and Common Tasks sections.
+
+5. **CI/CD Integration:**  
+   - If using GitHub Actions or other CI tools, add a section summarizing relevant workflow files and badge links.
+   - List checks (lint, type-check, build, test) enforced on PRs.
+
+6. **Accessibility & Internationalization:**  
+   - If accessibility (a11y) or i18n is added, call out key conventions for components.
+
+7. **Secrets Management:**  
+   - If using secret scanning or auto-rotation, document the process for local development and staging.
+
+8. **Analytics & Monitoring:**  
+   - If new dashboards or alerting are set up, link them and note how to access or respond to incidents.
+
+9. **Support & Contribution:**  
+   - Add a section for onboarding contributors, linking to `/CONTRIBUTING.md` (if present) or summarizing code review and branch strategy.
+
+10. **Automation & Scripts:**  
+    - Document any scripts in `package.json` or utility scripts in `/scripts/`.
+
+Review and update this file regularly as the project grows, especially after significant architectural or tooling changes.

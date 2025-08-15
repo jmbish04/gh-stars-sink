@@ -14,7 +14,7 @@ upload_source_maps = true
 
 # Assets that might work for workers, but wouldn't work for pages -- 'ASSET' is a reserved word
 [assets]
-binding = "ASSETS" # pages won't accept this, says its reserved
+binding = "STATIC_ASSETS"
 directory = "dist/public"
 
 
@@ -22,11 +22,6 @@ directory = "dist/public"
 
 # This new line tells Cloudflare Pages where your static site is built.
 # pages_build_output_dir = "dist"
-
-# Assets that are pages compliant
-# [assets]
-# binding = "STATIC_ASSETS"
-# directory = "dist/public"
 
 # STOP -- ENABLE THIS FOR PAGES
 

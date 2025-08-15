@@ -1,0 +1,321 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "GH Stars Sink API",
+    "version": "1.0.0",
+    "description": "Minimal API for link creation/management and AI slug suggestions, designed to be compatible with ChatGPT Custom Actions."
+  },
+  "servers": [
+    {
+      "url": "https://gh-stars-sink.SUBDOMAIN.workers.dev",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "healthCheck",
+        "summary": "Health check",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "properties": { "ok": { "type": "boolean" } }, "required": ["ok"] },
+                "example": { "ok": true }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/link/ai": {
+      "get": {
+        "operationId": "getAiSlugSuggestion",
+        "summary": "Suggest an AI-generated slug for a URL",
+        "security": [{ "SiteToken": [] }],
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "required": true,
+            "description": "Target URL to shorten",
+            "schema": { "type": "string", "format": "uri" }
+          },
+          {
+            "name": "hint",
+            "in": "query",
+            "required": false,
+            "description": "Optional style or keyword hint for the slug",
+            "schema": { "type": "string", "maxLength": 64 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "AI suggestion returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AiSuggestResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+        }
+      }
+    },
+    "/api/link/create": {
+      "post": {
+        "operationId": "createLink",
+        "summary": "Create a short link",
+        "security": [{ "SiteToken": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/CreateLinkRequest" } }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Link created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Link" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequestError" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" },
+          "409": { "$ref": "#/components/responses/ConflictError" }
+        }
+      }
+    },
+    "/api/link/edit": {
+      "put": {
+        "operationId": "editLink",
+        "summary": "Edit an existing link",
+        "security": [{ "SiteToken": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/EditLinkRequest" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Link updated",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Link" } }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequestError" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    },
+    "/api/link/upsert": {
+      "post": {
+        "operationId": "upsertLink",
+        "summary": "Create or update a link",
+        "security": [{ "SiteToken": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UpsertLinkRequest" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Link upserted",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Link" } }
+            }
+          },
+          "201": {
+            "description": "Link created",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/Link" } }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequestError" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" }
+        }
+      }
+    },
+    "/api/link/delete": {
+      "post": {
+        "operationId": "deleteLink",
+        "summary": "Delete a link",
+        "security": [{ "SiteToken": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/DeleteLinkRequest" } }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Link deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "ok": { "type": "boolean" }, "deletedId": { "type": "string" } },
+                  "required": ["ok"]
+                }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequestError" },
+          "401": { "$ref": "#/components/responses/UnauthorizedError" },
+          "404": { "$ref": "#/components/responses/NotFoundError" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "SiteToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-site-token",
+        "description": "Site token for auth (same value as NUXT_SITE_TOKEN)."
+      }
+    },
+    "schemas": {
+      "Link": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Internal ID" },
+          "slug": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "expiresAt": { "type": "string", "format": "date-time", "nullable": true },
+          "caseSensitive": { "type": "boolean", "default": false },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["slug", "url", "createdAt", "updatedAt"]
+      },
+      "CreateLinkRequest": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "slug": { "type": "string", "nullable": true },
+          "aiSlug": { "type": "boolean", "default": false, "description": "If true, server will generate a slug (may ignore provided slug)" },
+          "tags": { "type": "array", "items": { "type": "string" }, "nullable": true },
+          "expiresAt": { "type": "string", "format": "date-time", "nullable": true },
+          "caseSensitive": { "type": "boolean", "default": false }
+        },
+        "required": ["url"]
+      },
+      "EditLinkRequest": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "ID of link to update", "nullable": true },
+          "slug": { "type": "string", "description": "Slug of link to update (alternative to id)", "nullable": true },
+          "updates": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string", "format": "uri", "nullable": true },
+              "slug": { "type": "string", "nullable": true },
+              "tags": { "type": "array", "items": { "type": "string" }, "nullable": true },
+              "expiresAt": { "type": "string", "format": "date-time", "nullable": true },
+              "caseSensitive": { "type": "boolean", "nullable": true }
+            }
+          }
+        },
+        "required": ["updates"]
+      },
+      "UpsertLinkRequest": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "nullable": true },
+          "slug": { "type": "string", "nullable": true },
+          "url": { "type": "string", "format": "uri" },
+          "tags": { "type": "array", "items": { "type": "string" }, "nullable": true },
+          "expiresAt": { "type": "string", "format": "date-time", "nullable": true },
+          "caseSensitive": { "type": "boolean", "default": false }
+        },
+        "required": ["url"]
+      },
+      "DeleteLinkRequest": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "nullable": true },
+          "slug": { "type": "string", "nullable": true }
+        },
+        "description": "Provide either id or slug.",
+        "oneOf": [
+          { "required": ["id"] },
+          { "required": ["slug"] }
+        ]
+      },
+      "AiSuggestResponse": {
+        "type": "object",
+        "properties": {
+          "suggestedSlug": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "required": ["suggestedSlug"]
+      }
+    },
+    "responses": {
+      "BadRequestError": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "error": "invalid_request", "message": "Missing url" }
+          }
+        }
+      },
+      "UnauthorizedError": {
+        "description": "Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "error": "unauthorized", "message": "Invalid or missing x-site-token" }
+          }
+        }
+      },
+      "NotFoundError": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "error": "not_found", "message": "Link not found" }
+          }
+        }
+      },
+      "ConflictError": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": { "error": "conflict", "message": "Slug already exists" }
+          }
+        }
+      }
+    },
+    "schemasAdditional": {},
+    "schemasCommon": {
+      "deprecated": true
+    },
+    "schemas2": {},
+    "schemas3": {},
+    "schemas4": {},
+    "schemas5": {},
+    "schemas6": {},
+    "schemas7": {},
+    "schemas8": {},
+    "schemas9": {},
+    "schemas10": {},
+    "schemas11": {},
+    "schemas12": {},
+    "schemas13": {},
+    "schemas14": {},
+    "schemas15": {},
+    "schemas16": {}
+  }
+}

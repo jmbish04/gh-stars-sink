@@ -47,7 +47,7 @@
 
 ## MCP Worker Tool
 
-This repository also contains a Model Context Protocol (MCP) compliant backend implemented as a Cloudflare Worker. The worker exposes a `/search` endpoint and an OpenAPI schema at `/openapi.json` for integration with AI agents.
+This repository also contains a Model Context Protocol (MCP) compliant backend implemented as a Cloudflare Worker. The worker exposes a `/search` endpoint and an OpenAPI schema at `/openapi.json` for integration with AI agents. Search results are cached in a Workers KV namespace for low‑latency responses at the edge.
 
 ### Deploy on Cloudflare Workers
 
@@ -57,12 +57,12 @@ This repository also contains a Model Context Protocol (MCP) compliant backend i
    - `pnpm wrangler d1 create ghstars`
    - `pnpm wrangler kv:namespace create TERMS`
    - `pnpm wrangler vectorize create ghstars-index`
-4. Update the `wrangler.toml` file with the `database_id` for D1 and `id` for KV, obtained from the resource creation commands.
+4. Update the `wrangler.toml` file with the resource identifiers returned in the previous step.
 5. Deploy the worker using `pnpm wrangler deploy`.
 
 ### Run tests
 
-Execute `pnpm test` to run the unit tests against a local Workers runtime.
+Execute `pnpm test` to run the full test suite or `pnpm test:worker` to run only the Cloudflare Worker tests locally.
 
 ## ✨ Features
 

@@ -99,7 +99,7 @@ const app = new OpenAPIHono<{ Bindings: Env }>()
  * Health probe and quick liveness check.
  * @returns { status: 'ok' }
  */
-app.get('/', (c) => c.json({ status: 'ok' }))
+app.get('/', c => c.json({ status: 'ok' }))
 
 /**
  * Example: typed route using zod/openapi
@@ -133,9 +133,16 @@ const searchRoute = createRoute({
   },
 })
 
-app.openapi(searchRoute, (c) => {
+app.openapi(searchRoute, async (c) => {
   const { q } = c.req.valid('query')
-  return c.json({ results: [`stub result for ${q}`] })
+
+  const cached = await c.env.TERMS.get<{ results: string[] }>(q, { type: 'json' })
+  if (cached)
+    return c.json(cached)
+
+  const result = { results: [`stub result for ${q}`] }
+  await c.env.TERMS.put(q, JSON.stringify(result), { expirationTtl: 60 })
+  return c.json(result)
 })
 
 /**

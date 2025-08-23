@@ -23,7 +23,7 @@
     "deploy:worker": "npm run build && wrangler deploy",
     "preview": "wrangler dev --var $(cat .env | sed 's/=/:/g')",
     "test": "vitest run",
-    "test:worker": "vitest run -c vitest.worker.config.ts"
+    "test:worker": "vitest run tests/worker.spec.ts"
   },
   "dependencies": {
     "@hono/zod-openapi": "0.8.1",

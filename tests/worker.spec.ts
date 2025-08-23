@@ -13,7 +13,7 @@ describe('mcp worker', () => {
   it('caches search results in KV', async () => {
     const query = 'cache'
     await fetch(`/search?q=${query}`)
-    const cached = await env.TERMS.get(query)
-    expect(cached).toBeTruthy()
+    const cached = await env.TERMS.get(query, { type: 'json' })
+    expect(cached).toEqual({ results: [`stub result for ${query}`] })
   })
 })
